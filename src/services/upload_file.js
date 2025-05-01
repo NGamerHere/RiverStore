@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 import path from "path";
@@ -8,11 +6,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const uploadFile = async (filePath, bucketName, key) => {
+const uploadFile = async (filePath, key) => {
   try {
     const fileStream = fs.createReadStream(filePath);
     const uploadParams = {
-      Bucket: bucketName,
+      Bucket: process.env.AWS_BUCKET_NAME, 
       Key: key,
       Body: fileStream,
     };
@@ -25,9 +23,4 @@ const uploadFile = async (filePath, bucketName, key) => {
   }
 };
 
-
-const filePath = path.join(__dirname, "test.txt");
-const bucketName = "riverstorestg";
-const key = "test.txt";
-
-uploadFile(filePath, bucketName, key);
+export default uploadFile;
